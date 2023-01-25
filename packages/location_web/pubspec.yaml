@@ -14,7 +14,11 @@ dependencies:
     sdk: flutter
   http_parser: ^4.0.0
   js: ^0.6.3
-  location_platform_interface: ^2.3.0
+  location_platform_interface:
+    git:
+      url: git@github.com:craggy2593/flutterlocation.git
+      path: packages/location_platform_interface
+      ref: develop
   meta: ^1.3.0
 
 dev_dependencies:
