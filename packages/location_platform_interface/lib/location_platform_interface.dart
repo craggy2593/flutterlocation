@@ -54,7 +54,8 @@ class LocationPlatform extends PlatformInterface {
 
   /// Enables or disables service in the background mode.
   /// isForeground option is only using in Android 10 and above.
-  Future<bool> enableBackgroundMode({bool? enable, bool isForeground = false}) {
+  Future<bool> enableBackgroundMode(
+      {bool? enable, bool? isForeground = false}) {
     throw UnimplementedError();
   }
 
