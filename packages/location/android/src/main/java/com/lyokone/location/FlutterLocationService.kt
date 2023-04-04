@@ -90,7 +90,7 @@ class BackgroundNotification(
                 .setSubText(options.description)
 
         builder = if (options.color != null) {
-            builder.setColor(options.color).setColorized(true)
+            builder.setColor(options.color).setColorized(false)
         } else {
             builder.setColor(0).setColorized(false)
         }
