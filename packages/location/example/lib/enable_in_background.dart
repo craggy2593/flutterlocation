@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 
 class EnableInBackgroundWidget extends StatefulWidget {
-  const EnableInBackgroundWidget({super.key});
+  const EnableInBackgroundWidget({Key? key}) : super(key: key);
 
   @override
   _EnableInBackgroundState createState() => _EnableInBackgroundState();
@@ -26,7 +26,7 @@ class _EnableInBackgroundState extends State<EnableInBackgroundWidget> {
     setState(() {
       _error = null;
     });
-    final result = await location.isBackgroundModeEnabled();
+    final bool result = await location.isBackgroundModeEnabled();
     setState(() {
       _enabled = result;
     });
@@ -37,7 +37,7 @@ class _EnableInBackgroundState extends State<EnableInBackgroundWidget> {
       _error = null;
     });
     try {
-      final result =
+      final bool result =
           await location.enableBackgroundMode(enable: !(_enabled ?? false));
       setState(() {
         _enabled = result;
@@ -58,22 +58,20 @@ class _EnableInBackgroundState extends State<EnableInBackgroundWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          'Enabled in background: ${_error ?? '${_enabled ?? false}'}',
-          style: Theme.of(context).textTheme.bodyLarge,
-        ),
+        Text('Enabled in background: ${_error ?? '${_enabled ?? false}'}',
+            style: Theme.of(context).textTheme.bodyText1),
         Row(
           children: <Widget>[
             Container(
               margin: const EdgeInsets.only(right: 42),
               child: ElevatedButton(
-                onPressed: _checkBackgroundMode,
                 child: const Text('Check'),
+                onPressed: _checkBackgroundMode,
               ),
             ),
             ElevatedButton(
-              onPressed: _enabled == null ? null : _toggleBackgroundMode,
               child: Text(_enabled ?? false ? 'Disable' : 'Enable'),
+              onPressed: _enabled == null ? null : _toggleBackgroundMode,
             )
           ],
         )

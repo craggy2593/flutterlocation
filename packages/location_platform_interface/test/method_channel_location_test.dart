@@ -1,3 +1,7 @@
+// File created by
+// Lung Razvan <long1eu>
+// on 23/03/2020
+
 import 'dart:async';
 
 import 'package:async/async.dart';
@@ -9,49 +13,47 @@ import 'package:mockito/mockito.dart';
 
 import 'method_channel_location_test.mocks.dart';
 
+// ignore: always_specify_types
 @GenerateMocks([EventChannel])
 void main() {
-  final binding = TestWidgetsFlutterBinding.ensureInitialized();
+  TestWidgetsFlutterBinding.ensureInitialized();
 
   MethodChannel? methodChannel;
   MockEventChannel? eventChannel;
   late MethodChannelLocation location;
 
-  final log = <MethodCall>[];
+  final List<MethodCall> log = <MethodCall>[];
 
   setUp(() {
     methodChannel = const MethodChannel('lyokone/location');
     eventChannel = MockEventChannel();
     location = MethodChannelLocation.private(methodChannel, eventChannel);
 
-    binding.defaultBinaryMessenger.setMockMethodCallHandler(
-      methodChannel!,
-      (methodCall) async {
-        log.add(methodCall);
-        switch (methodCall.method) {
-          case 'getLocation':
-            return <String, dynamic>{
-              'latitude': 48.8534,
-              'longitude': 2.3488,
-            };
-          case 'changeSettings':
-            return 1;
-          case 'serviceEnabled':
-            return 1;
-          case 'requestService':
-            return 1;
-          default:
-            return '';
-        }
-      },
-    );
+    methodChannel!.setMockMethodCallHandler((MethodCall methodCall) async {
+      log.add(methodCall);
+      switch (methodCall.method) {
+        case 'getLocation':
+          return <String, dynamic>{
+            'latitude': 48.8534,
+            'longitude': 2.3488,
+          };
+        case 'changeSettings':
+          return 1;
+        case 'serviceEnabled':
+          return 1;
+        case 'requestService':
+          return 1;
+        default:
+          return '';
+      }
+    });
 
     log.clear();
   });
 
   group('getLocation', () {
     test('getLocation should convert results correctly', () async {
-      final receivedLocation = await location.getLocation();
+      final LocationData receivedLocation = await location.getLocation();
       expect(receivedLocation.latitude, 48.8534);
       expect(receivedLocation.longitude, 2.3488);
     });
@@ -60,70 +62,55 @@ void main() {
   test('changeSettings passes parameters correctly', () async {
     await location.changeSettings();
     expect(log, <Matcher>[
-      isMethodCall(
-        'changeSettings',
-        arguments: <String, dynamic>{
-          'accuracy': LocationAccuracy.high.index,
-          'interval': 1000,
-          'distanceFilter': 0
-        },
-      ),
+      isMethodCall('changeSettings', arguments: <String, dynamic>{
+        'accuracy': LocationAccuracy.high.index,
+        'interval': 1000,
+        'distanceFilter': 0
+      }),
     ]);
   });
 
   group('Service Status', () {
     test('serviceEnabled should convert results correctly', () async {
-      final result = await location.serviceEnabled();
+      final bool result = await location.serviceEnabled();
       expect(result, true);
     });
 
     test('requestService should convert to string correctly', () async {
-      final result = await location.requestService();
+      final bool result = await location.requestService();
       expect(result, true);
     });
   });
 
   group('Permission Status', () {
     test('Should convert int to correct Permission Status', () async {
-      binding.defaultBinaryMessenger.setMockMethodCallHandler(
-        methodChannel!,
-        (methodCall) async {
-          return 0;
-        },
-      );
-      var receivedPermission = await location.hasPermission();
+      methodChannel!.setMockMethodCallHandler((MethodCall methodCall) async {
+        return 0;
+      });
+      PermissionStatus receivedPermission = await location.hasPermission();
       expect(receivedPermission, PermissionStatus.denied);
       receivedPermission = await location.requestPermission();
       expect(receivedPermission, PermissionStatus.denied);
 
-      binding.defaultBinaryMessenger.setMockMethodCallHandler(
-        methodChannel!,
-        (methodCall) async {
-          return 1;
-        },
-      );
+      methodChannel!.setMockMethodCallHandler((MethodCall methodCall) async {
+        return 1;
+      });
       receivedPermission = await location.hasPermission();
       expect(receivedPermission, PermissionStatus.granted);
       receivedPermission = await location.requestPermission();
       expect(receivedPermission, PermissionStatus.granted);
 
-      binding.defaultBinaryMessenger.setMockMethodCallHandler(
-        methodChannel!,
-        (methodCall) async {
-          return 2;
-        },
-      );
+      methodChannel!.setMockMethodCallHandler((MethodCall methodCall) async {
+        return 2;
+      });
       receivedPermission = await location.hasPermission();
       expect(receivedPermission, PermissionStatus.deniedForever);
       receivedPermission = await location.requestPermission();
       expect(receivedPermission, PermissionStatus.deniedForever);
 
-      binding.defaultBinaryMessenger.setMockMethodCallHandler(
-        methodChannel!,
-        (methodCall) async {
-          return 3;
-        },
-      );
+      methodChannel!.setMockMethodCallHandler((MethodCall methodCall) async {
+        return 3;
+      });
       receivedPermission = await location.hasPermission();
       expect(receivedPermission, PermissionStatus.grantedLimited);
       receivedPermission = await location.requestPermission();
@@ -131,12 +118,9 @@ void main() {
     });
 
     test('Should throw if other message is sent', () async {
-      binding.defaultBinaryMessenger.setMockMethodCallHandler(
-        methodChannel!,
-        (methodCall) async {
-          return 12;
-        },
-      );
+      methodChannel!.setMockMethodCallHandler((MethodCall methodCall) async {
+        return 12;
+      });
       try {
         await location.hasPermission();
       } on PlatformException catch (err) {
@@ -156,7 +140,7 @@ void main() {
     setUp(() {
       controller = StreamController<Map<String, dynamic>>();
       when(eventChannel!.receiveBroadcastStream())
-          .thenAnswer((invoke) => controller.stream);
+          .thenAnswer((Invocation invoke) => controller.stream);
     });
 
     tearDown(() {
@@ -164,21 +148,21 @@ void main() {
     });
 
     test('call receiveBrodcastStream once', () {
-      location
-        ..onLocationChanged
-        ..onLocationChanged
-        ..onLocationChanged;
+      location.onLocationChanged;
+      location.onLocationChanged;
+      location.onLocationChanged;
       verify(eventChannel!.receiveBroadcastStream()).called(1);
     });
 
     test('should receive values', () async {
-      final queue = StreamQueue<LocationData>(location.onLocationChanged);
+      final StreamQueue<LocationData> queue =
+          StreamQueue<LocationData>(location.onLocationChanged);
 
       controller.add(<String, dynamic>{
         'latitude': 48.8534,
         'longitude': 2.3488,
       });
-      var data = await queue.next;
+      LocationData data = await queue.next;
       expect(data.latitude, 48.8534);
       expect(data.longitude, 2.3488);
 
