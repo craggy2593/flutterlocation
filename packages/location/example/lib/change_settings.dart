@@ -1,8 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
 class ChangeSettings extends StatefulWidget {
-  const ChangeSettings({super.key});
+  const ChangeSettings({Key? key}) : super(key: key);
 
   @override
   _ChangeSettingsState createState() => _ChangeSettingsState();
@@ -36,7 +37,7 @@ class _ChangeSettingsState extends State<ChangeSettings> {
         children: <Widget>[
           Text(
             'Change settings',
-            style: Theme.of(context).textTheme.bodyLarge,
+            style: Theme.of(context).textTheme.bodyText1,
           ),
           const SizedBox(height: 4),
           TextFormField(
@@ -57,7 +58,7 @@ class _ChangeSettingsState extends State<ChangeSettings> {
           const SizedBox(height: 4),
           DropdownButtonFormField<LocationAccuracy>(
             value: _locationAccuracy,
-            onChanged: (value) {
+            onChanged: (LocationAccuracy? value) {
               if (value == null) {
                 return;
               }

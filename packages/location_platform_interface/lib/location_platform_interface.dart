@@ -2,17 +2,17 @@ library location_platform_interface;
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:meta/meta.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 part 'src/method_channel_location.dart';
 part 'src/types.dart';
 
-/// The interface that implementations of `location` must extend.
 class LocationPlatform extends PlatformInterface {
-  /// Constructs a new [LocationPlatform].
   LocationPlatform() : super(token: _token);
 
   static final Object _token = Object();
@@ -54,10 +54,8 @@ class LocationPlatform extends PlatformInterface {
 
   /// Enables or disables service in the background mode.
   /// isForeground option is only using in Android 10 and above.
-  Future<bool> enableBackgroundMode({
-    bool? enable,
-    bool? isForeground = false,
-  }) {
+  Future<bool> enableBackgroundMode(
+      {bool? enable, bool? isForeground = false}) {
     throw UnimplementedError();
   }
 
@@ -113,7 +111,7 @@ class LocationPlatform extends PlatformInterface {
   ///
   /// Uses [title] as the notification's content title and searches for a
   /// drawable resource with the given [iconName]. If no matching resource is
-  /// found, no icon is shown. The content text will be set to [subtitle], while
+  /// found, no icon is shown. The content text will be set to [subTitle], while
   /// the sub text will be set to [description]. The notification [color] can
   /// also be customized.
   ///

@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 
 class ListenLocationWidget extends StatefulWidget {
-  const ListenLocationWidget({super.key});
+  const ListenLocationWidget({Key? key}) : super(key: key);
 
   @override
   _ListenLocationState createState() => _ListenLocationState();
@@ -30,7 +30,7 @@ class _ListenLocationState extends State<ListenLocationWidget> {
       setState(() {
         _locationSubscription = null;
       });
-    }).listen((currentLocation) {
+    }).listen((LocationData currentLocation) {
       setState(() {
         _error = null;
 
@@ -41,7 +41,7 @@ class _ListenLocationState extends State<ListenLocationWidget> {
   }
 
   Future<void> _stopListen() async {
-    await _locationSubscription?.cancel();
+    _locationSubscription?.cancel();
     setState(() {
       _locationSubscription = null;
     });
@@ -62,22 +62,22 @@ class _ListenLocationState extends State<ListenLocationWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          'Listen location: ${_error ?? '${_location ?? "unknown"}'}',
-          style: Theme.of(context).textTheme.bodyLarge,
+          'Listen location: ' + (_error ?? '${_location ?? "unknown"}'),
+          style: Theme.of(context).textTheme.bodyText1,
         ),
         Row(
           children: <Widget>[
             Container(
               margin: const EdgeInsets.only(right: 42),
               child: ElevatedButton(
+                child: const Text('Listen'),
                 onPressed:
                     _locationSubscription == null ? _listenLocation : null,
-                child: const Text('Listen'),
               ),
             ),
             ElevatedButton(
-              onPressed: _locationSubscription != null ? _stopListen : null,
               child: const Text('Stop'),
+              onPressed: _locationSubscription != null ? _stopListen : null,
             )
           ],
         ),
