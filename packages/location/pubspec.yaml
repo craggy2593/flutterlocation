@@ -4,6 +4,7 @@ version: 5.0.3
 homepage: https://docs.page/Lyokone/flutterlocation
 repository: https://github.com/Lyokone/flutterlocation
 issue_tracker: https://github.com/Lyokone/flutterlocation/issues
+publish_to: none
 
 environment:
   sdk: '>=2.18.0 <4.0.0'
@@ -25,8 +26,16 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  location_platform_interface: ^3.1.1
-  location_web: ^4.1.1
+  location_platform_interface: 
+    git:
+      url: git@github.com:craggy2593/flutterlocation.git
+      path: packages/location_platform_interface
+      ref: fix/backround-location-mar-24
+  location_web:
+    git:
+      url: git@github.com:craggy2593/flutterlocation.git
+      path: packages/location_web
+      ref: fix/backround-location-mar-24
 dev_dependencies:
   async: ^2.5.0
   build_runner: ^2.3.3
