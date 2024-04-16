@@ -22,6 +22,7 @@ dependencies:
       url: git@github.com:craggy2593/flutterlocation.git
       path: packages/location_platform_interface
       ref: fix/backround-location-mar-24
+      
 dev_dependencies:
   flutter_test:
     sdk: flutter
