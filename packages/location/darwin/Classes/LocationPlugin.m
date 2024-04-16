@@ -50,6 +50,7 @@
 
         self.clLocationManager = [[CLLocationManager alloc] init];
         self.clLocationManager.delegate = self;
+        self.clLocationManager.pausesLocationUpdatesAutomatically = false;
         self.clLocationManager.desiredAccuracy = kCLLocationAccuracyBest;
     }
 }
