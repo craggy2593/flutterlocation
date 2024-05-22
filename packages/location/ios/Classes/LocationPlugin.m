@@ -60,6 +60,7 @@
     self.clLocationManager = [[CLLocationManager alloc] init];
     self.clLocationManager.delegate = self;
     self.clLocationManager.pausesLocationUpdatesAutomatically = false;
+    self.clLocationManager.activityType = CLActivityType.otherNavigation;
     self.clLocationManager.desiredAccuracy = kCLLocationAccuracyBest;
   }
 }
