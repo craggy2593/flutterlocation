@@ -1,14 +1,14 @@
 name: location_web
 description: The web implementation of the location plugin.
-version: 5.0.1
+version: 5.0.3
 homepage: https://github.com/Lyokone/flutterlocation
 repository: https://github.com/Lyokone/flutterlocation
 issue_tracker: https://github.com/Lyokone/flutterlocation/issues
 publish_to: none
 
 environment:
-  sdk: ">=3.1.0 <4.0.0"
-  flutter: ">=3.16.0"
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.22.0"
 
 dependencies:
   flutter:
@@ -22,7 +22,8 @@ dependencies:
       url: git@github.com:craggy2593/flutterlocation.git
       path: packages/location_platform_interface
       ref: fix/backround-location-mar-24
-      
+  web: ">=^0.5.1 <2.0.0"
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
